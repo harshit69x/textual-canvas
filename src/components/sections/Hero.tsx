@@ -1,13 +1,18 @@
 import { GlitchText } from "../GlitchText";
 import { MagneticButton } from "../MagneticButton";
 import { useEffect, useState } from "react";
+import { useProfile } from "@/hooks/usePortfolioData";
 
 export const Hero = () => {
   const [mounted, setMounted] = useState(false);
+  const { data: profile, isLoading } = useProfile();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const title = profile?.title || "Creative Developer";
+  const tagline = profile?.tagline || "I design and build exceptional digital experiences. Currently focused on building accessible, human-centered products.";
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 lg:px-24 overflow-hidden noise-overlay">
@@ -21,7 +26,7 @@ export const Hero = () => {
           className={`transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
           <p className="text-mono text-muted-foreground text-sm md:text-base mb-6 tracking-[0.3em] uppercase">
-            <span className="text-primary">//</span> Creative Developer
+            <span className="text-primary">//</span> {isLoading ? "Loading..." : title}
           </p>
         </div>
 
@@ -39,8 +44,7 @@ export const Hero = () => {
           className={`max-w-xl transition-all duration-1000 delay-500 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
           <p className="text-muted-foreground text-lg md:text-xl leading-relaxed mb-10">
-            I design and build exceptional digital experiences. Currently focused on building accessible, 
-            human-centered products.
+            {tagline}
           </p>
 
           <MagneticButton>
