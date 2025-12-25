@@ -1,15 +1,23 @@
 import { ScrollReveal } from "../ScrollReveal";
 import { MagneticButton } from "../MagneticButton";
 import { GlitchText } from "../GlitchText";
-
-const socialLinks = [
-  { name: "GitHub", href: "#" },
-  { name: "LinkedIn", href: "#" },
-  { name: "Twitter", href: "#" },
-  { name: "Dribbble", href: "#" },
-];
+import { useProfile } from "@/hooks/usePortfolioData";
 
 export const Contact = () => {
+  const { data: profile } = useProfile();
+
+  const email = profile?.email || "hello@developer.com";
+  const socialLinks = profile?.socialLinks || [
+    { platform: "GitHub", url: "#" },
+    { platform: "LinkedIn", url: "#" },
+    { platform: "Twitter", url: "#" },
+  ];
+
+  // Capitalize platform names for display
+  const formatPlatformName = (platform: string) => {
+    return platform.charAt(0).toUpperCase() + platform.slice(1);
+  };
+
   return (
     <section className="py-32 px-6 md:px-12 lg:px-24" id="contact">
       <div className="max-w-6xl mx-auto">
@@ -35,19 +43,21 @@ export const Contact = () => {
 
         <ScrollReveal delay={300}>
           <div className="flex flex-col md:flex-row gap-8 items-start">
-            <MagneticButton>
-              Say Hello
-            </MagneticButton>
+            <a href={`mailto:${email}`}>
+              <MagneticButton>
+                Say Hello
+              </MagneticButton>
+            </a>
 
             <div className="flex flex-col gap-2">
               <span className="text-mono text-xs text-muted-foreground tracking-widest uppercase">
                 Email
               </span>
               <a
-                href="mailto:hello@developer.com"
+                href={`mailto:${email}`}
                 className="text-foreground text-lg hover:text-primary transition-colors"
               >
-                hello@developer.com
+                {email}
               </a>
             </div>
           </div>
@@ -59,17 +69,19 @@ export const Contact = () => {
             <div className="flex gap-8">
               {socialLinks.map((link) => (
                 <a
-                  key={link.name}
-                  href={link.href}
+                  key={link.platform}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-mono text-sm text-muted-foreground hover:text-primary transition-colors tracking-wide"
                 >
-                  {link.name}
+                  {formatPlatformName(link.platform)}
                 </a>
               ))}
             </div>
 
             <p className="text-mono text-sm text-muted-foreground">
-              © 2024 <span className="text-primary">◆</span> All rights reserved
+              © {new Date().getFullYear()} <span className="text-primary">◆</span> All rights reserved
             </p>
           </div>
         </ScrollReveal>
