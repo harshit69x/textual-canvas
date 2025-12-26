@@ -13,6 +13,8 @@ export const Hero = () => {
 
   const title = profile?.title || "Creative Developer";
   const tagline = profile?.tagline || "I design and build exceptional digital experiences. Currently focused on building accessible, human-centered products.";
+  const name = profile?.name || "Developer";
+  const isAvailable = profile?.isAvailable ?? true;
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 lg:px-24 overflow-hidden noise-overlay">
@@ -25,9 +27,16 @@ export const Hero = () => {
         <div
           className={`transition-all duration-1000 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          <p className="text-mono text-muted-foreground text-sm md:text-base mb-6 tracking-[0.3em] uppercase">
-            <span className="text-primary">//</span> {isLoading ? "Loading..." : title}
-          </p>
+          <div className="flex items-center gap-3 mb-6">
+            <p className="text-mono text-muted-foreground text-sm md:text-base tracking-[0.3em] uppercase">
+              <span className="text-primary">//</span> {isLoading ? "Loading..." : title}
+            </p>
+            {isAvailable && (
+              <span className="text-mono text-xs px-2 py-1 bg-green-500/20 text-green-400 rounded-full animate-pulse">
+                Available for work
+              </span>
+            )}
+          </div>
         </div>
 
         <h1
@@ -43,13 +52,33 @@ export const Hero = () => {
         <div
           className={`max-w-xl transition-all duration-1000 delay-500 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          <p className="text-muted-foreground text-lg md:text-xl leading-relaxed mb-10">
+          <p className="text-muted-foreground text-lg md:text-xl leading-relaxed mb-4">
             {tagline}
           </p>
+          {profile?.shortBio && (
+            <p className="text-muted-foreground/70 text-base leading-relaxed mb-10">
+              {profile.shortBio}
+            </p>
+          )}
+          {!profile?.shortBio && <div className="mb-10" />}
 
-          <MagneticButton>
-            View Work
-          </MagneticButton>
+          <div className="flex flex-wrap gap-4">
+            <a href="#work">
+              <MagneticButton>
+                View Work
+              </MagneticButton>
+            </a>
+            {profile?.resumeUrl && (
+              <a
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-mono text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 px-4 py-2 border border-border rounded hover:border-primary"
+              >
+                Download Resume →
+              </a>
+            )}
+          </div>
         </div>
       </div>
 
