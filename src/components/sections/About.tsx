@@ -49,6 +49,10 @@ export const About = () => {
         <ScrollReveal delay={200}>
           <div className="space-y-6 text-muted-foreground text-lg leading-relaxed">
             <p>{bio}</p>
+            <p>
+              I believe in the power of clean code, thoughtful UX, and relentless 
+              iteration. Every pixel matters, every line of code tells a story.
+            </p>
             {isAvailable && (
               <p className="text-foreground font-medium">
                 Currently available for freelance projects and collaborations.
