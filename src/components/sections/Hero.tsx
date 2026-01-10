@@ -42,11 +42,11 @@ export const Hero = () => {
         <h1
           className={`text-display text-5xl md:text-7xl lg:text-9xl font-extrabold leading-[0.9] tracking-tight mb-8 transition-all duration-1000 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
         >
-          <GlitchText text="CRAFTING" />
+          <GlitchText text="HARSHIT" />
           <br />
-          <span className="gradient-text">DIGITAL</span>
+          <span className="gradient-text">MOHANTY</span>
           <br />
-          <GlitchText text="EXPERIENCES" />
+          <GlitchText text="DEVELOPER" />
         </h1>
 
         <div
