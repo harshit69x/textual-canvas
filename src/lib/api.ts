@@ -196,6 +196,13 @@ export async function fetchDashboardStats(): Promise<DashboardStats> {
   return result.data;
 }
 
+// Visitor tracking
+export async function recordVisit(): Promise<void> {
+  await fetch(`${API_BASE_URL}/public/visit`, {
+    method: "POST",
+  });
+}
+
 // Health check
 export async function checkHealth(): Promise<{ success: boolean; message: string }> {
   const response = await fetch(`${API_BASE_URL}/health`);

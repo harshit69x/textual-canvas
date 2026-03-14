@@ -1,14 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { 
-  fetchProfile, 
-  fetchSkills, 
-  fetchProjects, 
-  fetchBlogs, 
+import {
+  fetchProfile,
+  fetchSkills,
+  fetchProjects,
+  fetchBlogs,
   fetchBlog,
   fetchExperiences,
   fetchDashboardStats,
-  type Profile, 
-  type Skill, 
+  type Profile,
+  type Skill,
   type Project,
   type Blog,
   type Experience,
@@ -75,7 +75,7 @@ export function useDashboardStats() {
 // Utility hooks for computed data
 export function useSkillsByCategory() {
   const { data: skills = [], ...rest } = useSkills();
-  
+
   const groupedSkills = skills.reduce((acc, skill) => {
     const category = skill.category || "Other";
     if (!acc[category]) {
@@ -90,7 +90,7 @@ export function useSkillsByCategory() {
 
 export function useFeaturedProjects() {
   const { data: projects = [], ...rest } = useProjects();
-  
+
   const featuredProjects = projects.filter(
     (project) => project.isFeatured || project.isPinned
   );
