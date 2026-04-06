@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/sections/Hero";
 import { MarqueeSection } from "@/components/sections/MarqueeSection";
@@ -11,14 +12,16 @@ import { recordVisit } from "@/lib/api";
 
 const Index = () => {
   const hasRecorded = useRef(false);
+  const location = useLocation();
 
   // Record visit silently on mount
   useEffect(() => {
     if (!hasRecorded.current) {
       hasRecorded.current = true;
-      recordVisit();
+      const source = location.pathname === "/ins" ? "instagram" : "general";
+      recordVisit(source);
     }
-  }, []);
+  }, [location.pathname]);
 
   return (
     <main className="relative min-h-screen bg-background text-foreground overflow-x-hidden">

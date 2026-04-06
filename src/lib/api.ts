@@ -202,9 +202,13 @@ export async function fetchDashboardStats(): Promise<DashboardStats> {
 }
 
 // Visitor tracking
-export async function recordVisit(): Promise<void> {
+export async function recordVisit(source: "instagram" | "general" = "general"): Promise<void> {
   await fetch(`${API_BASE_URL}/public/visit`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ source }),
   });
 }
 
