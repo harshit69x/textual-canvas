@@ -1,6 +1,12 @@
 import { ScrollReveal } from "../ScrollReveal";
 import { useProjects } from "@/hooks/usePortfolioData";
 
+const truncateText = (value: string, maxLength = 220) => {
+  if (!value) return value;
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength).trim()}...`;
+};
+
 export const Work = () => {
   const { data: projects = [], isLoading } = useProjects();
 
@@ -20,7 +26,9 @@ export const Work = () => {
     title: project.title || project.name || "Untitled Project",
     category: project.category || (project.type === "github" ? "GitHub Repository" : "Project"),
     year: project.lastUpdated ? new Date(project.lastUpdated).getFullYear().toString() : new Date().getFullYear().toString(),
-    description: project.description || "A creative project showcasing modern development techniques.",
+    description: truncateText(
+      project.description || "A creative project showcasing modern development techniques."
+    ),
     techStack: [...(project.techStack || []), ...(project.customTechnologies || [])],
     githubUrl: project.githubUrl,
     homepageUrl: project.homepageUrl,
@@ -131,7 +139,7 @@ export const Work = () => {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap items-center gap-2 mb-3">
-                        <h3 className="text-display text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors">
+                        <h3 className="text-display text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors break-words [overflow-wrap:anywhere]">
                           {project.title}
                         </h3>
                         {project.isPinned && (
@@ -142,7 +150,7 @@ export const Work = () => {
                         )}
                       </div>
 
-                      <p className="text-muted-foreground leading-relaxed max-w-2xl">
+                      <p className="text-muted-foreground leading-relaxed max-w-2xl break-words [overflow-wrap:anywhere]">
                         {project.description}
                       </p>
 
