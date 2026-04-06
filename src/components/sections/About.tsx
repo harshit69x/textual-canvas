@@ -7,6 +7,25 @@ export const About = () => {
   const { data: skills = [] } = useSkills();
   const { data: experiences = [] } = useExperiences();
 
+  const formatDateRange = (startDate: string, endDate?: string, isCurrentlyWorking?: boolean, isCurrent?: boolean) => {
+    const start = new Date(startDate).toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+
+    const active = Boolean(isCurrentlyWorking || isCurrent);
+    const end = active
+      ? "Present"
+      : endDate
+        ? new Date(endDate).toLocaleDateString("en-US", {
+            month: "short",
+            year: "numeric",
+          })
+        : "Present";
+
+    return `${start} - ${end}`;
+  };
+
   // Calculate years of experience from experience data
   const calculateYearsOfExperience = () => {
     if (experiences.length === 0) return 5;
@@ -101,17 +120,56 @@ export const About = () => {
                 return parts.length > 0 ? parts.join(", ") : null;
               };
               const expLocation = formatLocation();
+              const isActiveRole = Boolean(exp.isCurrentlyWorking || exp.isCurrent);
 
               return (
                 <ScrollReveal key={exp._id} delay={index * 100}>
                   <div className="border-l-2 border-primary/30 pl-6 py-4 hover:border-primary transition-colors">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-2">
-                      <h4 className="text-xl font-bold text-foreground">{exp.position}</h4>
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4 mb-2">
+                      <div className="flex items-start gap-4 min-w-0">
+                        <div className="flex-shrink-0">
+                          {exp.companyLogo ? (
+                            exp.companyWebsite ? (
+                              <a
+                                href={exp.companyWebsite}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block"
+                                aria-label={`${exp.company} website`}
+                              >
+                                <img
+                                  src={exp.companyLogo}
+                                  alt={exp.company}
+                                  className="w-14 h-14 rounded-2xl object-cover border border-border/60 bg-card"
+                                />
+                              </a>
+                            ) : (
+                              <img
+                                src={exp.companyLogo}
+                                alt={exp.company}
+                                className="w-14 h-14 rounded-2xl object-cover border border-border/60 bg-card"
+                              />
+                            )
+                          ) : (
+                            <div className="w-14 h-14 rounded-2xl border border-border/60 bg-primary/10 flex items-center justify-center text-lg font-bold text-primary">
+                              {exp.company.charAt(0)}
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="min-w-0">
+                          <h4 className="text-xl font-bold text-foreground">{exp.position}</h4>
+                          <p className="text-primary font-medium mb-1">{exp.company}</p>
+                          <span className="text-mono text-sm text-muted-foreground">
+                            {formatDateRange(exp.startDate, exp.endDate, exp.isCurrentlyWorking, exp.isCurrent)}
+                          </span>
+                        </div>
+                      </div>
+
                       <span className="text-mono text-sm text-muted-foreground">
-                        {new Date(exp.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })} - {exp.isCurrent ? 'Present' : exp.endDate ? new Date(exp.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Present'}
+                        {isActiveRole ? "Present" : exp.endDate ? "Completed" : "Present"}
                       </span>
                     </div>
-                    <p className="text-primary font-medium mb-2">{exp.company}</p>
                     {expLocation && (
                       <p className="text-muted-foreground text-sm mb-3">
                         📍 {expLocation} {exp.locationType && `• ${exp.locationType}`}

@@ -1,9 +1,7 @@
 import { ScrollReveal } from "../ScrollReveal";
-import { useState } from "react";
 import { useProjects } from "@/hooks/usePortfolioData";
 
 export const Work = () => {
-  const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const { data: projects = [], isLoading } = useProjects();
 
   // Sort projects: pinned first, then featured, then by lastUpdated
@@ -83,7 +81,7 @@ export const Work = () => {
           <div className="animate-pulse space-y-8">
             <div className="h-12 bg-muted rounded w-1/3"></div>
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 bg-muted rounded"></div>
+              <div key={i} className="h-52 bg-muted rounded-2xl"></div>
             ))}
           </div>
         </div>
@@ -106,121 +104,77 @@ export const Work = () => {
           </p>
         </ScrollReveal>
 
-        <div className="space-y-0">
+        <div className="space-y-6">
           {displayProjects.map((project, index) => (
             <ScrollReveal key={project._id} delay={index * 100}>
               <a
                 href={project.homepageUrl || project.githubUrl || "#"}
                 target={project.homepageUrl || project.githubUrl ? "_blank" : undefined}
                 rel="noopener noreferrer"
-                className="group border-t border-border py-8 md:py-12 cursor-pointer transition-all duration-300 block"
-                onMouseEnter={() => setHoveredProject(project.id)}
-                onMouseLeave={() => setHoveredProject(null)}
+                className="group block"
               >
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div className="flex items-center gap-6 md:gap-12">
-                    <span
-                      className={`text-mono text-sm transition-colors duration-300 ${
-                        hoveredProject === project.id ? "text-primary" : "text-muted-foreground"
-                      }`}
-                    >
-                      {project.id}
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <h3
-                        className={`text-display text-2xl md:text-4xl font-bold transition-all duration-300 ${
-                          hoveredProject === project.id
-                            ? "text-primary translate-x-4"
-                            : "text-foreground"
-                        }`}
-                      >
-                        {project.title}
-                      </h3>
-                      {project.isPinned && (
-                        <span className="text-xs px-2 py-0.5 bg-primary/20 text-primary rounded">
-                          📌 Pinned
-                        </span>
-                      )}
-                      {project.isFeatured && !project.isPinned && (
-                        <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">
-                          ⭐ Featured
-                        </span>
+                <article className="rounded-2xl border border-border/70 bg-background/30 backdrop-blur-sm p-5 md:p-6 transition-all duration-300 hover:border-primary/50 hover:-translate-y-1 hover:shadow-[0_0_40px_rgba(6,182,212,0.12)]">
+                  <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+                    <div className="w-full lg:w-[260px] flex-shrink-0">
+                      {project.coverImage ? (
+                        <img
+                          src={project.coverImage}
+                          alt={project.title}
+                          className="w-full aspect-video rounded-xl object-cover border border-border/60"
+                        />
+                      ) : (
+                        <div className="w-full aspect-video rounded-xl border border-border/60 bg-gradient-to-br from-primary/20 via-background to-card flex items-end p-4">
+                          <span className="text-mono text-sm text-primary">{project.id}</span>
+                        </div>
                       )}
                     </div>
-                  </div>
 
-                  <div className="flex items-center gap-4 md:gap-8 ml-12 md:ml-0">
-                    {project.language && (
-                      <span className="hidden lg:flex items-center gap-2 text-mono text-sm text-muted-foreground">
-                        <span className={`w-3 h-3 rounded-full ${getLanguageColor(project.language)}`}></span>
-                        {project.language}
-                      </span>
-                    )}
-                    <span className="text-mono text-sm text-muted-foreground hidden md:block">
-                      {project.category}
-                    </span>
-                    {project.stars !== undefined && project.stars > 0 && (
-                      <span className="text-mono text-sm text-muted-foreground hidden md:flex items-center gap-1">
-                        ⭐ {project.stars}
-                      </span>
-                    )}
-                    {project.forks !== undefined && project.forks > 0 && (
-                      <span className="text-mono text-sm text-muted-foreground hidden lg:flex items-center gap-1">
-                        🍴 {project.forks}
-                      </span>
-                    )}
-                    <span className="text-mono text-sm text-muted-foreground">
-                      {project.year}
-                    </span>
-                    <span
-                      className={`text-2xl transition-all duration-300 ${
-                        hoveredProject === project.id
-                          ? "text-primary translate-x-2"
-                          : "text-muted-foreground"
-                      }`}
-                    >
-                      →
-                    </span>
-                  </div>
-                </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <h3 className="text-display text-2xl md:text-3xl font-bold text-foreground group-hover:text-primary transition-colors">
+                          {project.title}
+                        </h3>
+                        {project.isPinned && (
+                          <span className="text-xs px-2 py-0.5 bg-primary/20 text-primary rounded">📌 Pinned</span>
+                        )}
+                        {project.isFeatured && !project.isPinned && (
+                          <span className="text-xs px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded">⭐ Featured</span>
+                        )}
+                      </div>
 
-                <div
-                  className={`overflow-hidden transition-all duration-300 ${
-                    hoveredProject === project.id
-                      ? "max-h-40 opacity-100 mt-4"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  <p className="text-muted-foreground ml-12 md:ml-24 max-w-xl">
-                    {project.description}
-                  </p>
+                      <p className="text-muted-foreground leading-relaxed max-w-2xl">
+                        {project.description}
+                      </p>
 
-                  {project.techStack && project.techStack.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mt-3 ml-12 md:ml-24">
-                      {project.techStack.slice(0, 8).map((tech, i) => (
-                        <span
-                          key={i}
-                          className="text-mono text-xs px-2 py-1 bg-primary/10 text-primary rounded"
-                        >
-                          {tech}
-                        </span>
-                      ))}
+                      {project.techStack && project.techStack.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-4">
+                          {project.techStack.slice(0, 8).map((tech, i) => (
+                            <span
+                              key={i}
+                              className="text-mono text-xs px-2 py-1 bg-primary/10 text-primary rounded"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
-                  )}
 
-                  <div className="flex gap-4 mt-4 ml-12 md:ml-24">
-                    {project.githubUrl && (
-                      <span className="text-mono text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
-                        GitHub ↗
-                      </span>
-                    )}
-                    {project.homepageUrl && (
-                      <span className="text-mono text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
-                        Live Demo ↗
-                      </span>
-                    )}
+                    <div className="flex flex-row lg:flex-col lg:items-end justify-between gap-4 lg:gap-2 text-mono text-sm text-muted-foreground min-w-[160px]">
+                      <span>{project.category}</span>
+                      <span>{project.year}</span>
+                      {project.language && (
+                        <span className="flex items-center gap-2">
+                          <span className={`w-2.5 h-2.5 rounded-full ${getLanguageColor(project.language)}`}></span>
+                          {project.language}
+                        </span>
+                      )}
+                      {project.stars !== undefined && project.stars > 0 && <span>⭐ {project.stars}</span>}
+                      {project.forks !== undefined && project.forks > 0 && <span>🍴 {project.forks}</span>}
+                      <span className="text-base text-primary group-hover:translate-x-1 transition-transform">View →</span>
+                    </div>
                   </div>
-                </div>
+                </article>
               </a>
             </ScrollReveal>
           ))}

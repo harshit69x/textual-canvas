@@ -94,10 +94,15 @@ export interface Experience {
   employmentType?: string;
   startDate: string;
   endDate?: string;
+  isCurrentlyWorking?: boolean;
   isCurrent: boolean;
   description?: string;
+  responsibilities?: string[];
+  achievements?: string[];
   technologies: string[];
   projects: ProjectInExperience[];
+  companyLogo?: string;
+  companyWebsite?: string;
   isVisible: boolean;
   displayOrder?: number;
 }
